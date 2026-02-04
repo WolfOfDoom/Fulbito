@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Fulbito Live</title>
+    <style>
+        :root {
+            --bg: #0b0f1a;
+            --panel: rgba(255, 255, 255, .06);
+            --panel2: rgba(255, 255, 255, .10);
+            --text: rgba(255, 255, 255, .92);
+            --muted: rgba(255, 255, 255, .65);
+            --line: rgba(255, 255, 255, .12);
+            --accent: #4da3ff;
+            --good: #27d17f;
+            --radius: 16px;
+            --shadow: 0 18px 50px rgba(0, 0, 0, .45);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(1200px 700px at 10% 10%, rgba(77, 163, 255, .18), transparent 55%),
+                radial-gradient(900px 600px at 90% 20%, rgba(39, 209, 127, .12), transparent 55%),
+                radial-gradient(1000px 700px at 50% 110%, rgba(255, 90, 122, .10), transparent 55%),
+                var(--bg);
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(14px);
+            background: rgba(11, 15, 26, .55);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .topbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            letter-spacing: .3px;
+            user-select: none;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 999px;
+            background: var(--good);
+            box-shadow: 0 0 0 6px rgba(39, 209, 127, .12);
+        }
+
+        .search {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            border-radius: 999px;
+            min-width: 180px;
+        }
+
+        .search input {
+            width: 100%;
+            background: transparent;
+            border: 0;
+            outline: none;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .pill {
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--muted);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .wrap {
+            max-width: 1200px;
+            margin: 18px auto 40px;
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: 1.55fr .95fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 980px) {
+            .wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: linear-gradient(180deg, var(--panel), rgba(255, 255, 255, .04));
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .player-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, .03);
+        }
+
+        .match {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .badge {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .18);
+            background: rgba(77, 163, 255, .14);
+            color: rgba(255, 255, 255, .95);
+            white-space: nowrap;
+        }
+
+        .title {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .title b {
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .title span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            border: 1px solid var(--line);
+            background: var(--panel2);
+            color: var(--text);
+            padding: 9px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: transform .12s ease, background .12s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn.primary {
+            border-color: rgba(77, 163, 255, .35);
+            background: rgba(77, 163, 255, .18);
+        }
+
+        .player {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #050814;
+        }
+
+        .player iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .player-foot {
+            padding: 10px 12px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 12px;
+            background: rgba(255, 255, 255, .02);
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Sidebar */
+        .side .section-head {
+            padding: 12px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, .03);
+        }
+
+        .section-head b {
+            font-size: 13px
+        }
+
+        .section-head span {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .list {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .channel {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .04);
+            border-radius: 14px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            cursor: pointer;
+            transition: transform .12s ease, background .12s ease, border-color .12s ease;
+        }
+
+        .channel:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .channel.active {
+            border-color: rgba(77, 163, 255, .40);
+            background: rgba(77, 163, 255, .14);
+        }
+
+        .ch-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .ch-meta b {
+            font-size: 13px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .ch-meta span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .tag {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .14);
+            color: rgba(255, 255, 255, .82);
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="dot" aria-hidden="true"></div>
+                <span>Saiko Fulbito</span>
+            </div>
+
+            <div class="search" role="search">
+                <span style="color:var(--muted);font-size:13px;">🔎</span>
+                <input id="searchInput" type="search" placeholder="Buscar canal…" />
+            </div>
+
+            <div class="pill">📍 MTY, MX</div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <!-- PLAYER -->
+        <section class="card" aria-label="Reproductor">
+            <div class="player-head">
+                <div class="match">
+                    <span class="badge" id="badgeLabel">CANAL</span>
+                    <div class="title">
+                        <b id="channelName">Selecciona un canal</b>
+                        <span id="channelDesc">Elige uno del menú →</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" id="muteBtn" type="button"
+                        title="No silencia el iframe (depende del proveedor), solo es UI">
+                        Silenciar
+                    </button>
+                    <button class="btn primary" id="fsBtn" type="button">Pantalla completa</button>
+                </div>
+            </div>
+
+            <div class="player" id="playerBox">
+                <iframe id="streamFrame" src="about:blank" scrolling="no" allowfullscreen="true"
+                    referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-presentation"
+                    title="Streaming">
+                </iframe>
+            </div>
+
+            <div class="player-foot">
+                <span id="footLeft">Tip: usa el menú para cambiar canales.</span>
+                <span id="footRight">By Saiko-Tilin</span>
+            </div>
+        </section>
+
+        <!-- CHANNEL MENU -->
+        <aside class="card side" aria-label="Canales">
+            <div class="section-head">
+                <b>Canales</b>
+                <span id="countLabel">0</span>
+            </div>
+            <div class="list" id="channelList"></div>
+        </aside>
+    </main>
+
+    <script>
+        // ✨ Pon aquí tus embeds legales / autorizados.
+        // Ejem: YouTube Live embed, Twitch embed, o tu propio player.
+        const CHANNELS = [
+            { id: "tudn", name: "TUDN México", desc: "Fútbol y deportes", tag: "Deportes", src: 'https://embed.saohgdasregions.fun/embed2/tudn.html' },
+            { id: "canal2", name: "Canal 2", desc: "Placeholder", tag: "HD", src: "https://TU-EMBED-LEGAL.example" },
+            { id: "canal3", name: "Canal 3", desc: "Placeholder", tag: "Live", src: "https://TU-EMBED-LEGAL.example" }
+        ];
+
+        const els = {
+            list: document.getElementById("channelList"),
+            count: document.getElementById("countLabel"),
+            search: document.getElementById("searchInput"),
+            frame: document.getElementById("streamFrame"),
+            box: document.getElementById("playerBox"),
+            name: document.getElementById("channelName"),
+            desc: document.getElementById("channelDesc"),
+            badge: document.getElementById("badgeLabel"),
+            fsBtn: document.getElementById("fsBtn"),
+            muteBtn: document.getElementById("muteBtn"),
+            footLeft: document.getElementById("footLeft"),
+        };
+
+        let activeId = null;
+
+        function renderList(filterText = "") {
+            const q = filterText.trim().toLowerCase();
+            const items = CHANNELS.filter(c =>
+                !q || c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.tag.toLowerCase().includes(q)
+            );
+
+            els.count.textContent = `${items.length} canales`;
+            els.list.innerHTML = "";
+
+            for (const c of items) {
+                const div = document.createElement("div");
+                div.className = "channel" + (c.id === activeId ? " active" : "");
+                div.setAttribute("role", "button");
+                div.tabIndex = 0;
+                div.innerHTML = `
+          <div class="ch-meta">
+            <b title="${c.name}">${c.name}</b>
+            <span>${c.desc}</span>
+          </div>
+          <span class="tag">${c.tag}</span>
+        `;
+
+                const activate = () => setChannel(c.id);
+                div.addEventListener("click", activate);
+                div.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" || e.key === " ") activate();
+                });
+
+                els.list.appendChild(div);
+            }
+        }
+
+        function setChannel(id) {
+            const c = CHANNELS.find(x => x.id === id);
+            if (!c) return;
+
+            activeId = id;
+
+            els.frame.src = c.src;
+            els.name.textContent = c.name;
+            els.desc.textContent = c.desc;
+            els.badge.textContent = "CANAL";
+            els.footLeft.textContent = `Reproduciendo: ${c.name}`;
+
+            renderList(els.search.value);
+        }
+
+        els.search.addEventListener("input", () => renderList(els.search.value));
+
+        els.fsBtn.addEventListener("click", async () => {
+            try {
+                if (!document.fullscreenElement) await els.box.requestFullscreen();
+                else await document.exitFullscreen();
+            } catch (e) {
+                alert("Fullscreen bloqueado por el navegador. Revisa permisos.");
+            }
+        });
+
+        // Botón “mute” solo de UI: el audio del iframe lo controla el proveedor.
+        let mutedUI = false;
+        els.muteBtn.addEventListener("click", () => {
+            mutedUI = !mutedUI;
+            els.muteBtn.textContent = mutedUI ? "Silenciado (UI)" : "Silenciar (UI)";
+            els.badge.textContent = mutedUI ? "MUTE" : "CANAL";
+        });
+
+        // Inicial
+        renderList("");
+        // Opcional: autoseleccionar el primero
+        if (CHANNELS.length) setChannel(CHANNELS[0].id);
+    </script>
+</body>
+
+</html>
