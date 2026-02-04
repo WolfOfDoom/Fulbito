@@ -336,10 +336,6 @@
                 </div>
 
                 <div class="actions">
-                    <button class="btn" id="muteBtn" type="button"
-                        title="No silencia el iframe (depende del proveedor), solo es UI">
-                        Silenciar
-                    </button>
                     <button class="btn primary" id="fsBtn" type="button">Pantalla completa</button>
                 </div>
             </div>
@@ -352,14 +348,14 @@
 
             <div class="player-foot">
                 <span id="footLeft">Tip: usa el menú para cambiar canales.</span>
-                <span id="footRight">By Saiko-Tilin</span>
+                <span id="footRight">Se recomienda usar navegador Opera en celular</span>
             </div>
         </section>
 
-        <!-- CHANNEL MENU -->
+        <!-- MENU DE CANALES-->
         <aside class="card side" aria-label="Canales">
             <div class="section-head">
-                <b>Canales</b>
+                <b>Ehhh Canales, Canales!!! 🗣️🗣️</b>
                 <span id="countLabel">0</span>
             </div>
             <div class="list" id="channelList"></div>
@@ -367,12 +363,10 @@
     </main>
 
     <script>
-        // ✨ Pon aquí tus embeds legales / autorizados.
-        // Ejem: YouTube Live embed, Twitch embed, o tu propio player.
         const CHANNELS = [
-            { id: "tudn", name: "TUDN México", desc: "Fútbol y deportes", tag: "Deportes", src: 'https://embed.saohgdasregions.fun/embed2/tudn.html' },
-            { id: "canal2", name: "Olimpia vs América", desc: "Deportes", tag: "Concachafa", src: "https://www.capoplay.net/ligamx7.php" },
-            { id: "canal3", name: "Canal 3", desc: "Placeholder", tag: "Live", src: "https://TU-EMBED-LEGAL.example" }
+            { id: "tudn", name: "TUDN México", desc: "Fútbol y deportes", tag: "Fulbo", src: 'https://embed.saohgdasregions.fun/embed2/tudn.html' },
+            { id: "tudn usa", name: "TUDN USA", desc: "Fútbol y deportes", tag: "Fulbo", src: "https://streamtp10.com/global1.php?stream=tudn_usa" },
+            { id: "azteca deportes", name: "Azteca Deportes", desc: "Fulbo", tag: "Chorizo Power", src: "https://embed.ksdjugfsddeports.com/embed2/aztecadeportes.html" }
         ];
 
         const els = {
@@ -449,17 +443,9 @@
             }
         });
 
-        // Botón “mute” solo de UI: el audio del iframe lo controla el proveedor.
-        let mutedUI = false;
-        els.muteBtn.addEventListener("click", () => {
-            mutedUI = !mutedUI;
-            els.muteBtn.textContent = mutedUI ? "Silenciado (UI)" : "Silenciar (UI)";
-            els.badge.textContent = mutedUI ? "MUTE" : "CANAL";
-        });
-
         // Inicial
         renderList("");
-        // Opcional: autoseleccionar el primero
+        // autoseleccionar el primero
         if (CHANNELS.length) setChannel(CHANNELS[0].id);
     </script>
 </body>
